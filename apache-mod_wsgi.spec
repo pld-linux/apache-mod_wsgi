@@ -12,7 +12,7 @@ Source0:	http://modwsgi.googlecode.com/files/mod_%{mod_name}-%{version}.tar.gz
 Source1:	%{name}.conf
 URL:		http://code.google.com/p/modwsgi/
 BuildRequires:	apache >= 2.0.52-7
-BuildRequires:	apache-apxs >= 2.0.52-7
+BuildRequires:	%{apxs}
 BuildRequires:	apache-devel >= 2.0.52-7
 BuildRequires:	apr-devel >= 1:1.0.0
 BuildRequires:	autoconf
