@@ -1,0 +1,15 @@
+--- mod_wsgi-1.0/configure.ac~	2007-07-31 15:13:08.000000000 +0300
++++ mod_wsgi-1.0/configure.ac	2007-12-26 20:27:23.190556576 +0200
+@@ -88,8 +88,10 @@
+ AC_SUBST(LDLIBS)
+ 
+ AC_MSG_CHECKING(Apache version)
+-HTTPD="`${APXS} -q SBINDIR`/`${APXS} -q TARGET`"
+-HTTPD_VERSION=`$HTTPD -v | awk '/version/ {print $3}' | awk -F/ '{print $2}'`
++if test -z "$HTTPD_VERSION"; then
++    HTTPD="`${APXS} -q SBINDIR`/`${APXS} -q TARGET`"
++    HTTPD_VERSION=`$HTTPD -v | awk '/version/ {print $3}' | awk -F/ '{print $2}'`
++fi
+ AC_MSG_RESULT($HTTPD_VERSION)
+ 
+ LIBEXECDIR="`${APXS} -q LIBEXECDIR`"
