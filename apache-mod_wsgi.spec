@@ -4,14 +4,14 @@ Summary:	WSGI interface for the Apache Web server
 Summary(pl.UTF-8):	Interfejs WSGI dla serwera WWW Apache
 Name:		apache-mod_%{mod_name}
 Version:	1.0
-Release:	1
+Release:	2
 License:	Apache Group License
 Group:		Networking/Daemons
 Source0:	http://modwsgi.googlecode.com/files/mod_%{mod_name}-%{version}.tar.gz
 # Source0-md5:	44e20174c127a50a75f040f881b0a52c
 Source1:	%{name}.conf
+Patch0:		%{name}-apache-version.patch
 URL:		http://code.google.com/p/modwsgi/
-BuildRequires:	apache >= 2.0.52-7
 BuildRequires:	%{apxs}
 BuildRequires:	apache-devel >= 2.0.52-7
 BuildRequires:	apr-devel >= 1:1.0.0
@@ -23,8 +23,8 @@ Requires:	apache(modules-api) = %apache_modules_api
 Requires:	apr >= 1:1.0.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_pkglibdir	%(%{apxs} -q LIBEXECDIR 2>/dev/null)
-%define		_sysconfdir	%(%{apxs} -q SYSCONFDIR 2>/dev/null)
+%define		apacheconfdir	%(%{apxs} -q SYSCONFDIR 2>/dev/null)/conf.d
+%define		apachelibdir	%(%{apxs} -q LIBEXECDIR 2>/dev/null)
 
 %description
 The mod_wsgi adapter is an Apache module that provides a WSGI
@@ -42,21 +42,23 @@ używania istniejących adapterów WSGI dla mod_python lub CGI.
 
 %prep
 %setup -q -n mod_%{mod_name}-%{version}
+%patch0 -p1
 
 %build
 %{__aclocal}
 %{__autoconf}
+HTTPD_VERSION=$(rpm -q --qf '%{V}' apache-devel); export HTTPD_VERSION
 %configure \
 	--with-apxs=%{apxs}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_pkglibdir},%{_sysconfdir}/httpd.conf}
+install -d $RPM_BUILD_ROOT{%{apachelibdir},%{apacheconfdir}}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf/61_mod_wsgi.conf
+install %{SOURCE1} $RPM_BUILD_ROOT%{apacheconfdir}/61_mod_wsgi.conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -72,5 +74,5 @@ fi
 %files
 %defattr(644,root,root,755)
 %doc README
-%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/httpd.conf/*_mod_%{mod_name}.conf
-%attr(755,root,root) %{_pkglibdir}/*.so
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{apacheconfdir}/*_mod_%{mod_name}.conf
+%attr(755,root,root) %{apachelibdir}/*.so
