@@ -34,11 +34,12 @@ C runtime and for hosting WSGI applications within Apache has a lower
 overhead than using existing WSGI adapters for mod_python or CGI.
 
 %description -l pl.UTF-8
-Adapter mod_wsgi jest modułem udostępniajacym interfejs WSGI dla
+Adapter mod_wsgi jest modułem udostępniającym interfejs WSGI dla
 aplikacji WWW napisanych w języku Python i osadzonych w serwerze
-Apache. Adapter jest w całosci napisany w języku C w oparciu o
-bibliotekę runtime Apache i ma mniejsze wymagania niż w przypadku
-używania istniejących adapterów WSGI dla mod_python lub CGI.
+Apache. Adapter jest w całości napisany w języku C w oparciu o
+bibliotekę uruchomieniową Apache i ma mniejsze wymagania niż w
+przypadku używania istniejących adapterów WSGI dla modułu mod_python
+lub CGI.
 
 %prep
 %setup -q -n mod_%{mod_name}-%{version}
