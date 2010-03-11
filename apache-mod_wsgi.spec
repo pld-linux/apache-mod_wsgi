@@ -1,23 +1,28 @@
+%bcond_with	python3
+#
 %define		mod_name	wsgi
 %define 	apxs		/usr/sbin/apxs
 Summary:	WSGI interface for the Apache Web server
 Summary(pl.UTF-8):	Interfejs WSGI dla serwera WWW Apache
 Name:		apache-mod_%{mod_name}
-Version:	2.5
+Version:	3.2
 Release:	1
 License:	Apache
 Group:		Networking/Daemons
 Source0:	http://modwsgi.googlecode.com/files/mod_%{mod_name}-%{version}.tar.gz
-# Source0-md5:	43ad11c477799e2f780c50197c420afd
+# Source0-md5:	7e4f7f443f562f21f61d1bd06defa1d8
 Source1:	%{name}.conf
-Patch0:		%{name}-apache-version.patch
 URL:		http://code.google.com/p/modwsgi/
 BuildRequires:	%{apxs}
 BuildRequires:	apache-devel >= 2.0.52-7
 BuildRequires:	apr-devel >= 1:1.0.0
 BuildRequires:	autoconf
 BuildRequires:	automake
+%if %{with python3}
+BuildRequires:	python3-devel
+%else
 BuildRequires:	python-devel >= 2.3
+%endif
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires:	apache(modules-api) = %apache_modules_api
 Requires:	apr >= 1:1.0.0
@@ -43,14 +48,18 @@ lub CGI.
 
 %prep
 %setup -q -n mod_%{mod_name}-%{version}
-%patch0 -p1
 
 %build
 %{__aclocal}
 %{__autoconf}
-HTTPD_VERSION=$(rpm -q --qf '%{V}' apache-devel); export HTTPD_VERSION
+%if %{with python3}
+PYTHONBIN=%{__python3}
+%else
+PYTHONBIN=%{__python}
+%endif
 %configure \
-	--with-apxs=%{apxs}
+	--with-apxs=%{apxs} \
+	--with-python=$PYTHONBIN
 
 %install
 rm -rf $RPM_BUILD_ROOT
