@@ -1,16 +1,21 @@
-%bcond_with	python3
+# TODO:
+# - build py2 and py3 variants both?
+
 #
+# Conditional build:
+%bcond_with	python3	# use CPython 3.x
+
 %define		mod_name	wsgi
 %define 	apxs		/usr/sbin/apxs
 Summary:	WSGI interface for the Apache Web server
 Summary(pl.UTF-8):	Interfejs WSGI dla serwera WWW Apache
 Name:		apache-mod_%{mod_name}
-Version:	3.3
+Version:	3.4
 Release:	1
 License:	Apache
 Group:		Networking/Daemons
 Source0:	http://modwsgi.googlecode.com/files/mod_%{mod_name}-%{version}.tar.gz
-# Source0-md5:	6172bb2bbabcd0c25867c2bc06f99dbb
+# Source0-md5:	f42d69190ea0c337ef259cbe8d94d985
 Source1:	%{name}.conf
 URL:		http://code.google.com/p/modwsgi/
 BuildRequires:	%{apxs}
@@ -24,7 +29,7 @@ BuildRequires:	python3-devel
 BuildRequires:	python-devel >= 2.3
 %endif
 BuildRequires:	rpmbuild(macros) >= 1.268
-Requires:	apache(modules-api) = %apache_modules_api
+Requires:	apache(modules-api) = %{apache_modules_api}
 Requires:	apr >= 1:1.0.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -64,11 +69,10 @@ PYTHONBIN=%{__python}
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{apachelibdir},%{apacheconfdir}}
-
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install %{SOURCE1} $RPM_BUILD_ROOT%{apacheconfdir}/61_mod_wsgi.conf
+cp -p %{SOURCE1} $RPM_BUILD_ROOT%{apacheconfdir}/61_mod_wsgi.conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
