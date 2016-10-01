@@ -10,16 +10,14 @@
 Summary:	WSGI interface for the Apache Web server
 Summary(pl.UTF-8):	Interfejs WSGI dla serwera WWW Apache
 Name:		apache-mod_%{mod_name}
-Version:	3.5
-Release:	3
+Version:	4.5.7
+Release:	0.1
 License:	Apache
 Group:		Networking/Daemons
-# Source0:	http://modwsgi.googlecode.com/files/mod_%{mod_name}-%{version}.tar.gz
-# https://github.com/GrahamDumpleton/mod_wsgi/archive/3.5.tar.gz
-Source0:	https://github.com/GrahamDumpleton/mod_wsgi/archive/%{version}.tar.gz
-# Source0-md5:	ed08ce86cf34a60441b708db05da970f
+Source0:	https://github.com/GrahamDumpleton/mod_wsgi/archive/%{version}/mod_%{mod_name}-%{version}.tar.gz
+# Source0-md5:	6d307e246684399c5dc501350e34e390
 Source1:	%{name}.conf
-URL:		http://code.google.com/p/modwsgi/
+URL:		http://modwsgi.readthedocs.io/
 BuildRequires:	%{apxs}
 BuildRequires:	apache-devel >= 2.0.52-7
 BuildRequires:	apr-devel >= 1:1.0.0
@@ -42,8 +40,8 @@ Requires:	python-modules
 Conflicts:	apache-mod_python
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		apacheconfdir	%(%{apxs} -q SYSCONFDIR 2>/dev/null)/conf.d
-%define		apachelibdir	%(%{apxs} -q LIBEXECDIR 2>/dev/null)
+%define		_pkglibdir	%(%{apxs} -q LIBEXECDIR 2>/dev/null)
+%define		_sysconfdir	%(%{apxs} -q SYSCONFDIR 2>/dev/null)/conf.d
 
 %description
 The mod_wsgi adapter is an Apache module that provides a WSGI
@@ -66,22 +64,21 @@ lub CGI.
 %build
 %{__aclocal}
 %{__autoconf}
-%if %{with python3}
-PYTHONBIN=%{__python3}
-%else
-PYTHONBIN=%{__python}
-%endif
 %configure \
-	--with-apxs=%{apxs} \
-	--with-python=$PYTHONBIN
+%if %{with python3}
+	--with-python=%{__python3} \
+%else
+	--with-python=%{__python} \
+%endif
+	--with-apxs=%{apxs}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{apachelibdir},%{apacheconfdir}}
+install -d $RPM_BUILD_ROOT{%{_pkglibdir},%{_sysconfdir}}
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-cp -p %{SOURCE1} $RPM_BUILD_ROOT%{apacheconfdir}/61_mod_wsgi.conf
+cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/61_mod_wsgi.conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -96,6 +93,6 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc README
-%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{apacheconfdir}/*_mod_%{mod_name}.conf
-%attr(755,root,root) %{apachelibdir}/*.so
+%doc README.rst CREDITS.rst
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/*_mod_%{mod_name}.conf
+%attr(755,root,root) %{_pkglibdir}/mod_%{mod_name}.so
