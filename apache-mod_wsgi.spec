@@ -1,5 +1,7 @@
 # TODO:
 # - build py2 and py3 variants both?
+# - add -n mod_wsgi-express package
+#   https://github.com/GrahamDumpleton/mod_wsgi#installation-into-python
 
 #
 # Conditional build:
