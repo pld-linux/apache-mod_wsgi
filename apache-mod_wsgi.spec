@@ -11,7 +11,7 @@ Summary:	WSGI interface for the Apache Web server
 Summary(pl.UTF-8):	Interfejs WSGI dla serwera WWW Apache
 Name:		apache-mod_%{mod_name}
 Version:	3.5
-Release:	2
+Release:	3
 License:	Apache
 Group:		Networking/Daemons
 # Source0:	http://modwsgi.googlecode.com/files/mod_%{mod_name}-%{version}.tar.gz
@@ -33,6 +33,11 @@ BuildRequires:	python-devel >= 2.3
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires:	apache(modules-api) = %{apache_modules_api}
 Requires:	apr >= 1:1.0.0
+%if %{with python3}
+Requires:	python3-modules
+%else
+Requires:	python-modules
+%endif
 # http://helpful.knobs-dials.com/index.php/Mod_wsgi_notes#PyEval_AcquireThread:_non-NULL_old_thread_state
 Conflicts:	apache-mod_python
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
