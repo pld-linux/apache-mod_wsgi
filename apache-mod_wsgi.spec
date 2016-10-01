@@ -17,7 +17,7 @@ Group:		Networking/Daemons
 Source0:	https://github.com/GrahamDumpleton/mod_wsgi/archive/%{version}/mod_%{mod_name}-%{version}.tar.gz
 # Source0-md5:	6d307e246684399c5dc501350e34e390
 Source1:	%{name}.conf
-URL:		http://modwsgi.readthedocs.io/
+URL:		http://www.modwsgi.org/
 BuildRequires:	%{apxs}
 BuildRequires:	apache-devel >= 2.0.52-7
 BuildRequires:	apr-devel >= 1:1.0.0
