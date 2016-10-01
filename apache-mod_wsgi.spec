@@ -13,7 +13,7 @@ Summary:	WSGI interface for the Apache Web server
 Summary(pl.UTF-8):	Interfejs WSGI dla serwera WWW Apache
 Name:		apache-mod_%{mod_name}
 Version:	4.5.7
-Release:	0.2
+Release:	0.5
 License:	Apache
 Group:		Networking/Daemons
 Source0:	https://github.com/GrahamDumpleton/mod_wsgi/archive/%{version}/mod_%{mod_name}-%{version}.tar.gz
@@ -59,7 +59,7 @@ Group:		Networking/Daemons
 Requires:	apache(modules-api) = %{apache_modules_api}
 Requires:	apr >= 1:1.0.0
 Requires:	python-modules
-Conflicts:	%{name} < 4.5.7-0.2
+Obsoletes:	%{name} < 4.5.7-0.2
 # http://helpful.knobs-dials.com/index.php/Mod_wsgi_notes#PyEval_AcquireThread:_non-NULL_old_thread_state
 Conflicts:	apache-mod_python
 
@@ -146,6 +146,14 @@ sed -e 's/mod_wsgi.so/mod_wsgi-py3.so/' %{SOURCE1} > $RPM_BUILD_ROOT%{_sysconfdi
 
 %clean
 rm -rf $RPM_BUILD_ROOT
+
+%triggerpostun py2 -- %{name} < 4.5.7-0.2
+if [ -f %{_sysconfdir}/61_mod_wsgi.conf.rpmsave ]; then
+	mv %{_sysconfdir}/61_mod_wsgi-py2.conf{,rpmnew}
+	mv %{_sysconfdir}/61_mod_wsgi{.conf.rpmsave,-py2.conf}
+	%{__sed} -i -e 's/mod_wsgi.so/mod_wsgi-py2.so/' $RPM_BUILD_ROOT%{_sysconfdir}/61_mod_wsgi-py2.conf
+	%service -q httpd restart
+fi
 
 %post py2
 %service -q httpd restart
