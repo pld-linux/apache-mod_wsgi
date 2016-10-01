@@ -59,7 +59,8 @@ Group:		Networking/Daemons
 Requires:	apache(modules-api) = %{apache_modules_api}
 Requires:	apr >= 1:1.0.0
 Requires:	python-modules
-Obsoletes:	%{name} < 4.5.7-0.2
+Obsoletes:	apache-mod_wsgi < 4.5.7-0.2
+Conflicts:	%{name}-py3
 # http://helpful.knobs-dials.com/index.php/Mod_wsgi_notes#PyEval_AcquireThread:_non-NULL_old_thread_state
 Conflicts:	apache-mod_python
 
@@ -86,6 +87,7 @@ Requires:	apache(modules-api) = %{apache_modules_api}
 Requires:	apr >= 1:1.0.0
 Requires:	python3-modules
 Conflicts:	%{name} < 4.5.7-0.2
+Conflicts:	%{name}-py2
 # http://helpful.knobs-dials.com/index.php/Mod_wsgi_notes#PyEval_AcquireThread:_non-NULL_old_thread_state
 Conflicts:	apache-mod_python3
 
