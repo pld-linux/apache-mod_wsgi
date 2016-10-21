@@ -8,12 +8,12 @@
 %bcond_without	python3 # mod_wsgi for CPython 3.x
 
 %define		mod_name	wsgi
-%define 	apxs		/usr/sbin/apxs
+%define		apxs		/usr/sbin/apxs
 Summary:	WSGI interface for the Apache Web server
 Summary(pl.UTF-8):	Interfejs WSGI dla serwera WWW Apache
 Name:		apache-mod_%{mod_name}
 Version:	4.5.7
-Release:	1
+Release:	2
 License:	Apache
 Group:		Networking/Daemons
 Source0:	https://github.com/GrahamDumpleton/mod_wsgi/archive/%{version}/mod_%{mod_name}-%{version}.tar.gz
@@ -59,6 +59,7 @@ Group:		Networking/Daemons
 Requires:	apache(modules-api) = %{apache_modules_api}
 Requires:	apr >= 1:1.0.0
 Requires:	python-modules
+Provides:	apache(mod_wsgi) = %{version}-%{release}
 Obsoletes:	apache-mod_wsgi < 4.5.7-0.2
 Conflicts:	%{name}-py3
 # http://helpful.knobs-dials.com/index.php/Mod_wsgi_notes#PyEval_AcquireThread:_non-NULL_old_thread_state
@@ -86,6 +87,7 @@ Group:		Networking/Daemons
 Requires:	apache(modules-api) = %{apache_modules_api}
 Requires:	apr >= 1:1.0.0
 Requires:	python3-modules
+Provides:	apache(mod_wsgi) = %{version}-%{release}
 Conflicts:	%{name} < 4.5.7-0.2
 Conflicts:	%{name}-py2
 # http://helpful.knobs-dials.com/index.php/Mod_wsgi_notes#PyEval_AcquireThread:_non-NULL_old_thread_state
