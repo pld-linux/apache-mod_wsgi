@@ -13,7 +13,7 @@ Summary:	WSGI interface for the Apache Web server
 Summary(pl.UTF-8):	Interfejs WSGI dla serwera WWW Apache
 Name:		apache-mod_%{mod_name}
 Version:	4.5.7
-Release:	3
+Release:	4
 License:	Apache
 Group:		Networking/Daemons
 Source0:	https://github.com/GrahamDumpleton/mod_wsgi/archive/%{version}/mod_%{mod_name}-%{version}.tar.gz
@@ -153,7 +153,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %triggerpostun py2 -- %{name} < 4.5.7-0.2
 if [ -f %{_sysconfdir}/61_mod_wsgi.conf.rpmsave ]; then
-	mv %{_sysconfdir}/61_mod_wsgi-py2.conf{,rpmnew}
+	mv %{_sysconfdir}/61_mod_wsgi-py2.conf{,.rpmnew}
 	mv %{_sysconfdir}/61_mod_wsgi{.conf.rpmsave,-py2.conf}
 	%{__sed} -i -e 's/mod_wsgi.so/mod_wsgi-py2.so/' $RPM_BUILD_ROOT%{_sysconfdir}/61_mod_wsgi-py2.conf
 	%service -q httpd restart
