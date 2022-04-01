@@ -12,12 +12,12 @@
 Summary:	WSGI interface for the Apache Web server
 Summary(pl.UTF-8):	Interfejs WSGI dla serwera WWW Apache
 Name:		apache-mod_%{mod_name}
-Version:	4.6.8
-Release:	4
+Version:	4.9.0
+Release:	1
 License:	Apache
 Group:		Networking/Daemons
 Source0:	https://github.com/GrahamDumpleton/mod_wsgi/archive/%{version}/mod_%{mod_name}-%{version}.tar.gz
-# Source0-md5:	ab90fa37543a1b0a1fff4c66df2524bb
+# Source0-md5:	3849425d78e716511388a5894cc00479
 Source1:	%{name}.conf
 URL:		http://www.modwsgi.org/
 BuildRequires:	%{apxs}
